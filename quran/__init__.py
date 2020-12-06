@@ -1,0 +1,1 @@
+from .quran_page_provider import QuranPageProvider

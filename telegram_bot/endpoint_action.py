@@ -1,6 +1,7 @@
 from flask import Response
-class EndpointAction(object):
 
+
+class EndpointAction(object):
     def __init__(self, action):
         self.action = action
         self.response = Response(status=200, headers={})

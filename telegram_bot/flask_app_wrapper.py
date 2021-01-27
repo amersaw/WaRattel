@@ -8,9 +8,12 @@ class FlaskAppWrapper(object):
     def __init__(self, name):
         self.app = Flask(name)
 
-    def run(self, port):
+    def run(self, port: int):
         self.app.run(threaded=True, port=port)
 
-    def add_endpoint(self, endpoint=None, methods=None, endpoint_name=None, handler=None):
-        self.app.add_url_rule(endpoint, endpoint_name,
-                              EndpointAction(handler), methods=methods)
+    def add_endpoint(
+        self, endpoint=None, methods=None, endpoint_name=None, handler=None
+    ):
+        self.app.add_url_rule(
+            endpoint, endpoint_name, EndpointAction(handler), methods=methods
+        )

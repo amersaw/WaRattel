@@ -9,13 +9,17 @@ class BotBrain (object):
         self.bot = bot
         pass
 
+    def isInt(self, x):
+        return all([xi in '1234567890' for xi in x])
     def process(self, msg_text, channel, user_id, msg):
         if channel == 'telegram':
             user = users.get_user_by_telegram_id(user_id)
         if user is None:
             users.add_user(User.from_telegram_user(msg.from_user))
-        if msg_text == "/start" or True:
-            file = "AgACAgQAAxkDAAMFX81Q-x-_zlHCqrVuLChByBVzMC8AApqrMRs_uHRSFMPgutkz8zS9myQqXQADAQADAgADeAADa0wAAh4E"
-            # file = self.quranPages.get_quran_page(377)
-            # msg = self.bot.send_photo(chat_id = user_id, photo=fileThumb ,caption="Page : 377")
-            print(msg)
+        if self.isInt(msg.text):
+            file = self.quranPages.get_quran_page(msg.text)
+            msg = self.bot.send_photo(chat_id = user_id, photo=file ,caption="Page : 377")
+            print(msg)    
+        else:
+            self.bot.send_message(chat_id = user_id, text="وعليكم السلام")
+        

@@ -31,5 +31,18 @@ class LocalHandler(object):
         self.app.run(port)
 
     def respond(self):
-        update = self.telegram_handler.bot.get_update(request.get_json(force=True))
-        self.telegram_handler.handle_update(update)
+        update = None
+        try:
+            update = self.telegram_handler.bot.get_update(request.get_json(force=True))
+            self.telegram_handler.handle_update(update)
+        except Exception as ex:
+            if (
+                update
+                and update.message
+                and update.message.chat
+                and update.message.chat.id
+            ):
+                self.telegram_handler.bot.send_message(
+                    chat_id=update.message.chat.id, text=str(ex)
+                )
+            return 1

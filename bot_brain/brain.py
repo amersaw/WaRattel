@@ -14,7 +14,7 @@ class BotBrain(object):
     def isInt(self, x):
         return all([xi in "1234567890" for xi in x])
 
-    def process(self, msg_text, channel, user_id, msg):
+    def process(self, msg_text, channel, user_id, msg, msg_id):
         # if channel == 'telegram':
         #     user = users.get_user_by_telegram_id(user_id)
         # if user is None:
@@ -23,7 +23,10 @@ class BotBrain(object):
             if self.isInt(msg.text):
                 file = self.quranPages.get_quran_page(msg.text)
                 msg = self.bot.send_photo(
-                    chat_id=user_id, photo=file, caption="Page : 377"
+                    chat_id=user_id,
+                    photo=file,
+                    caption="Page : 377",
+                    reply_to_message_id=msg_id,
                 )
                 print(msg)
             else:

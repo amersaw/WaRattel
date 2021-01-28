@@ -2,10 +2,11 @@
 import re
 from config import config
 from telegram import Update
+from bot_brain import BotBrain
 
 
 class TelegramHandler(object):
-    def __init__(self, telegram_bot, bot_brain):
+    def __init__(self, telegram_bot, bot_brain: BotBrain):
         self.bot = telegram_bot
         self.bot_brain = bot_brain
 
@@ -15,6 +16,13 @@ class TelegramHandler(object):
     def handle_update(self, update: Update):
         chat_id = update.message.chat.id
         msg_id = update.message.message_id
+        if update.message and not update.message.text:
+            self.bot.send(
+                chat_id=chat_id,
+                reply_to_message_id=msg_id,
+                text="Can handle only text messages",
+            )
+            return 1
         text = update.message.text.encode("utf-8").decode()
         if update.message.chat.type != "private":
             self.bot.send(
@@ -23,7 +31,7 @@ class TelegramHandler(object):
                 text="Only work on private chats",
             )
             return "ok"
-        self.bot_brain.process(text, "telegram", chat_id, update.message)
+        self.bot_brain.process(text, "telegram", chat_id, update.message, msg_id)
         return "ok"
 
     def set_webhook(self):

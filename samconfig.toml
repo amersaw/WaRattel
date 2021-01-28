@@ -6,5 +6,5 @@ stack_name = "my-bot"
 s3_bucket = "amersaw-test-bucket"
 s3_prefix = "my-bot"
 region = "eu-west-1"
-confirm_changeset = true
+confirm_changeset = false
 capabilities = "CAPABILITY_IAM"

@@ -5,15 +5,24 @@ from config import config
 
 
 def lambda_handler(event, context):
+    update = None
     bot = TelegramBot(config)
-    bot_brain = BotBrain(bot)
-    handler = TelegramHandler(bot, bot_brain)
-    update = handler.bot.get_update(json.loads(event["body"]))
-    handler.handle_update(update)
-    return {
-        "statusCode": 200,
-        "body": json.dumps({"message": "hello world",}),
-    }
+    try:
+        bot_brain = BotBrain(bot)
+        handler = TelegramHandler(bot, bot_brain)
+        update = handler.bot.get_update(json.loads(event["body"]))
+        handler.handle_update(update)
+        return {
+            "statusCode": 200,
+            "body": json.dumps({"message": "hello world",}),
+        }
+    except Exception as ex:
+        if update and update.message and update.message.chat and update.message.chat.id:
+            bot.send_message(chat_id=update.message.chat.id, text=str(ex))
+        return {
+            "statusCode": 200,
+            "body": 1,
+        }
 
 
 if __name__ == "__main__":

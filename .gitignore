@@ -133,3 +133,6 @@ dmypy.json
 
 #Config files
 config.json
+
+#AWS
+.aws-sam

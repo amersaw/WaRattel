@@ -1,3 +1,4 @@
 from setuptools import setup, find_packages
-from model import User
-setup(name='Warattel', version='0.01', packages=find_packages())
+
+setup(name="Warattel", version="0.1", packages=find_packages())
+

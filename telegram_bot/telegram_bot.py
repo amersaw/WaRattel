@@ -1,9 +1,8 @@
 import telegram
-from config import config
 
 
 class TelegramBot(telegram.Bot):
-    def __init__(self):
+    def __init__(self, config):
         self.TOKEN = config["bot_token"]
         super().__init__(token=self.TOKEN)
         # self.bot = telegram.Bot(token=self.TOKEN)
@@ -14,7 +13,8 @@ class TelegramBot(telegram.Bot):
         )
 
     def setWebhook(self, url):
-        super().setWebhook(f"{url}{self.TOKEN}")
+        x = super().setWebhook(f"{url}{self.TOKEN}")
+        print(x)
 
     def WebhookInfo(self):
         return self.getWebhookInfo()

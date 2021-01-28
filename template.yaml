@@ -15,14 +15,38 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: .
-      Handler: app_lambda/telegram/webhook_handler.lambda_handler
+      Handler: app_lambda/msg_handler.lambda_handler
       Runtime: python3.7
       Events:
         HandleUpdate:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /handle_update
+            Path: /handle/{proxy+}
             Method: post 
+  GetWebhookFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: .
+      Handler: app_lambda/webhook_handler.get_webhook_info_lambda_handler
+      Runtime: python3.7
+      Events:
+        HandleUpdate:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /
+            Method: get 
+  SetWebhookFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: .
+      Handler: app_lambda/webhook_handler.set_webhook_info_lambda_handler
+      Runtime: python3.7
+      Events:
+        HandleUpdate:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /set_webhook
+            Method: get 
 
 Outputs:
   WebhookApi:

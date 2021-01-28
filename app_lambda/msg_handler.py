@@ -1,24 +1,32 @@
 import json
 from bot_brain import BotBrain
-from telegram_bot import TelegramHandler, TelegramBot
+from bots import Teleboto
+from update_handlers import TelegramHandler
 from config import config
 
 
 def lambda_handler(event, context):
     update = None
-    bot = TelegramBot(config)
+    bot = Teleboto(config)
     try:
         bot_brain = BotBrain(bot)
-        handler = TelegramHandler(bot, bot_brain)
-        update = handler.bot.get_update(json.loads(event["body"]))
-        handler.handle_update(update)
+        telegram_handler = TelegramHandler(bot, bot_brain)
+
+        update = None
+        try:
+            update = bot.to_update(json.loads(event["body"]))
+            telegram_handler.handle_update(update)
+        except Exception as ex:
+            if update.sender_id:
+                bot.send_message(chat_id=update.sender_id, text=str(ex))
+
         return {
             "statusCode": 200,
             "body": json.dumps({"message": "hello world",}),
         }
     except Exception as ex:
-        if update and update.message and update.message.chat and update.message.chat.id:
-            bot.send_message(chat_id=update.message.chat.id, text=str(ex))
+        if update and update.sender_id:
+            bot.send_message(chat_id=update.sender_id, text=str(ex))
         return {
             "statusCode": 200,
             "body": 1,
@@ -27,9 +35,9 @@ def lambda_handler(event, context):
 
 if __name__ == "__main__":
     msg = {
-        "update_id": 3694258,
+        "update_id": 3694319,
         "message": {
-            "message_id": 60,
+            "message_id": 191,
             "from": {
                 "id": 176412950,
                 "is_bot": False,
@@ -45,15 +53,15 @@ if __name__ == "__main__":
                 "username": "amersaw",
                 "type": "private",
             },
-            "date": 1611784576,
-            "text": "11",
+            "date": 1611804400,
+            "text": "99",
         },
     }
     msg_json: str = json.dumps(msg)
     event = {
         "queryStringParameters": {"mode": "basic"},
         "pathParameters": {},
-        "body": msg_json,
+        "body": msg_json,  # json.dumps(msg_json),
     }
     a = lambda_handler(event, None)
     pass

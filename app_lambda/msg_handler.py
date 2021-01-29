@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     update = None
     bot = Teleboto(config)
     try:
-        bot_brain = BotBrain(bot)
+        bot_brain = BotBrain()
         telegram_handler = TelegramHandler(bot, bot_brain)
 
         update = None
@@ -29,7 +29,7 @@ def lambda_handler(event, context):
             bot.send_message(chat_id=update.sender_id, text=str(ex))
         return {
             "statusCode": 200,
-            "body": 1,
+            "body": json.dumps({"Exception": str(ex)}),
         }
 
 
@@ -54,7 +54,7 @@ if __name__ == "__main__":
                 "type": "private",
             },
             "date": 1611804400,
-            "text": "99",
+            "text": "g99",
         },
     }
     msg_json: str = json.dumps(msg)

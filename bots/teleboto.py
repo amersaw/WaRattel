@@ -1,6 +1,5 @@
-from logging import setLoggerClass
 import telegram
-from model import Update, Channel, MsgType
+from model import Update, Channel, MsgType, Response
 
 
 class Teleboto(telegram.Bot):
@@ -9,6 +8,23 @@ class Teleboto(telegram.Bot):
         self.webhook_url = config["bot_webhook_url"]
         super().__init__(token=self.TOKEN)
         # self.bot = telegram.Bot(token=self.TOKEN)
+
+    def send_response(self, response: Response) -> bool:
+        if response.channel != Channel.TELEGRAM:
+            return False
+        if response.type == MsgType.TEXT:
+            self.send_message(
+                chat_id=response.reciever_service_id,
+                text=response.text,
+                reply_to_message_id=response.update.msg_id if response.update else None,
+            )
+        elif response.type == MsgType.ATTACHMENT_URL:
+            self.send_photo(
+                chat_id=response.reciever_service_id,
+                photo=response.attachement_url,
+                caption=response.text,
+                reply_to_message_id=response.update.msg_id if response.update else None,
+            )
 
     def send(self, chat_id, text, reply_to_message_id):
         self.send_message(

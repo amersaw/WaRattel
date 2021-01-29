@@ -1,18 +1,15 @@
+from model import MsgType
+from model import Response, Update
 from quran import QuranPageProvider
-from model import Update
-from bots import Teleboto
 
-# from telegram_bot import TelegramBot
 
 # from model import User
 # from data import users
 
 
 class BotBrain:
-    def __init__(self, bot: Teleboto):
+    def __init__(self):
         self.quranPages = QuranPageProvider()
-        self.bot = bot
-        pass
 
     def isInt(self, x):
         return all([xi in "1234567890" for xi in x])
@@ -25,16 +22,16 @@ class BotBrain:
         try:
             if self.isInt(update.text):
                 file = self.quranPages.get_quran_page(update.text)
-                msg = self.bot.send_photo(
-                    chat_id=update.sender_id,
-                    photo=file,
-                    caption=f"Page : {update.text}",
-                    reply_to_message_id=update.msg_id,
+                response = Response(
+                    update=update,
+                    text=f"Page : {update.text}",
+                    channel=update.channel,
+                    type=MsgType.ATTACHMENT_URL,
+                    attachement_url=file,
                 )
-
+                return response
             else:
-                self.bot.send_message(chat_id=update.sender_id, text="وعليكم السلام")
+                return Response(update, "وعليكم السلام")
         except Exception as ex:
-            self.bot.send_message(chat_id=update.sender_id, text=str(ex))
-        return 1
+            return Response(update, str(ex))
 

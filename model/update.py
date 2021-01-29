@@ -1,5 +1,5 @@
-from .channel import Channel
-from .msg_type import MsgType
+from .Enums.channel import Channel
+from .Enums.msg_type import MsgType
 
 
 class Update:

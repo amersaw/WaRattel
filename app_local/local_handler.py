@@ -1,4 +1,3 @@
-from model.channel import Channel
 from update_handlers import TelegramHandler
 import update_handlers
 from .flask_app_wrapper import FlaskAppWrapper
@@ -18,36 +17,36 @@ class LocalHandler(object):
         self.app.add_endpoint(
             endpoint=f"/telegram/TAFADAL",
             endpoint_name="ad",
-            handler=self.respond,
+            handler=self.telegram_respond,
             methods=["POST"],
         )
         self.app.add_endpoint(
             endpoint=f"/telegram/set_webhook",
             endpoint_name="set_webhook",
-            handler=self.teleboto.set_webhook,
+            handler=self.telegram_set_webhook,
             methods=["GET"],
         )
         self.app.add_endpoint(
             endpoint=f"/telegram",
             endpoint_name="index",
-            handler=self.index,
+            handler=self.telegram_index,
             methods=["GET"],
         )
 
     def run(self, port=4743):
         self.app.run(port)
 
-    def set_webhook(self):
+    def telegram_set_webhook(self):
         if self.teleboto.set_webhook():
             return "webhook setup ok"
         else:
             return "webhook setup failed"
 
-    def index(self):
+    def telegram_index(self):
         info = self.teleboto.get_webhook_info()
         return f"<pre>{info}</pre>"
 
-    def respond(self):
+    def telegram_respond(self):
         update = None
         try:
             update = self.teleboto.to_update(request.get_json(force=True))

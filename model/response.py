@@ -1,3 +1,4 @@
+from .predef_option import PredefOption
 from .update import Update
 from .Enums.msg_type import MsgType
 from .Enums.channel import Channel
@@ -12,6 +13,7 @@ class Response:
         channel: Channel = None,
         type: MsgType = MsgType.TEXT,
         attachement_url: str = None,
+        predefined_responces: list[PredefOption] = None,
     ) -> None:
 
         self.update: Update = update
@@ -23,3 +25,4 @@ class Response:
         self.type: MsgType = type
         self.text: str = text
         self.attachement_url: str = attachement_url
+        self.predefined_responces = predefined_responces

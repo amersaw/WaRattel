@@ -132,7 +132,6 @@ dmypy.json
 .vscode
 
 #Config files
-config.json
-config.py
+secrets.txt
 #AWS
 .aws-sam

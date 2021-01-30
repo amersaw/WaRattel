@@ -10,8 +10,12 @@ workflows:
           context: aws_personal
       - hold: 
           type: approval
+          requires:
+            - build
       - deploy:
           context: aws_personal
+          requires:
+            - hold
 jobs:
   build:
     docker:

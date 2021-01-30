@@ -31,7 +31,7 @@ class BotBrain:
                 )
                 return response
             else:
-                return Response(update, "وعليكم السلام")
+                return Response(update, "❤️وعليكم السلام")
         except Exception as ex:
             return Response(update, str(ex))
 

@@ -11,50 +11,52 @@ Globals:
     Timeout: 3
 
 Resources:
-  HandleUpdateFunction:
+  TelegramHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: .
-      Handler: app_lambda/msg_handler.lambda_handler
+      Handler: app_lambda/msg_handler.the_handler
       Runtime: python3.7
       Events:
-        HandleUpdate:
+        TelegramHandler:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /handle/{proxy+}
-            Method: post 
-  GetWebhookFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: .
-      Handler: app_lambda/webhook_handler.get_webhook_info_lambda_handler
-      Runtime: python3.7
-      Events:
-        HandleUpdate:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /
-            Method: get 
-  SetWebhookFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: .
-      Handler: app_lambda/webhook_handler.set_webhook_info_lambda_handler
-      Runtime: python3.7
-      Events:
-        HandleUpdate:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /set_webhook
-            Method: get 
+            Path: /{proxy+}
+            Method: 
+              post
+              get
+  # GetWebhookFunction:
+  #   Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  #   Properties:
+  #     CodeUri: .
+  #     Handler: app_lambda/webhook_handler.get_webhook_info_lambda_handler
+  #     Runtime: python3.7
+  #     Events:
+  #       HandleUpdate:
+  #         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+  #         Properties:
+  #           Path: /
+  #           Method: get 
+  # SetWebhookFunction:
+  #   Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  #   Properties:
+  #     CodeUri: .
+  #     Handler: app_lambda/webhook_handler.set_webhook_info_lambda_handler
+  #     Runtime: python3.7
+  #     Events:
+  #       HandleUpdate:
+  #         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+  #         Properties:
+  #           Path: /set_webhook
+  #           Method: get 
 
 Outputs:
   WebhookApi:
     Description: "API Gateway endpoint URL for Prod stage for Webhook function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/handle_update/"
-  HandleUpdateFunction:
+  TelegramHandlerFunction:
     Description: "Handle Telegram Update Lambda Function ARN"
-    Value: !GetAtt HandleUpdateFunction.Arn
-  HandleUpdateFunctionIamRole:
+    Value: !GetAtt TelegramHandlerFunction.Arn
+  TelegramHandlerFunctionRole:
     Description: "Implicit IAM Role created for Webhook function"
-    Value: !GetAtt HandleUpdateFunctionRole.Arn
+    Value: !GetAtt TelegramHandlerFunctionRole.Arn

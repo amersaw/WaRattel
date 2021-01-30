@@ -32,7 +32,7 @@ class Teleboto(telegram.Bot):
         )
 
     def set_webhook(self):
-        return super().setWebhook(f"{self.webhook_url}TAFADAL")
+        return super().setWebhook(f"{self.webhook_url}{self.TOKEN}")
 
     def get_webhook(self):
         wh = self.getWebhookInfo()

@@ -41,6 +41,12 @@ jobs:
       - run: 
           name: "echo an env var that is part of our context"
           command: |
-            echo $aws-access-key-id
+            echo $AWS_ACCESS_KEY_ID
+      - run: 
+          name: "Sam Build"
+          command: sam build
+      - run: 
+          name: "Sam deploy"
+          command: sam deploy
 
 

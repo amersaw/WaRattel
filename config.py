@@ -1,7 +1,7 @@
 from os import getenv
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv("secrets.txt")
 
 config = {
     "connection_string": getenv("DB_CONNECTION_STRING"),

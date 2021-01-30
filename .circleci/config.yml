@@ -21,6 +21,11 @@ jobs:
       - sam/install
       - python/install-packages:
           pkg-manager: pip
+      - run:
+          name: Setup Environment Variables
+          command: |
+            echo "export TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN" >> .env
+            echo "export TELEGRAM_WEBHOOK_URL=$TELEGRAM_WEBHOOK_URL" >> .env
       - run: 
           name: "Sam Build"
           command: sam build

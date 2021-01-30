@@ -1,13 +1,12 @@
-import json
-from os import path
+from os import getenv
+from dotenv import load_dotenv
 
-if path.exists("config.json"):
-    config = json.load(open("config.json"))
-else:
-    config = {
-        "connection_string": "",
-        "db_name": "warattel",
-        "bot_token": "",
-        "bot_webhook_url": "",
-    }
+load_dotenv()
+
+config = {
+    "connection_string": getenv("DB_CONNECTION_STRING"),
+    "db_name": getenv("DB_NAME"),
+    "bot_token": getenv("TELEGRAM_BOT_TOKEN"),
+    "bot_webhook_url": getenv("TELEGRAM_WEBHOOK_URL"),
+}
 

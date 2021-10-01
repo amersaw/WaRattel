@@ -9,9 +9,9 @@ class PredefOption:
         self.pos_column = pos_column
         pass
 
-    @classmethod
+    @staticmethod
     def KB_PrevNext() -> List["PredefOption"]:
-        res: list[PredefOption] = []
+        res: List[PredefOption] = []
         res.append(PredefOption("Next", "next", 0, 0))
         res.append(PredefOption("Previous", "prev", 0, 1))
         return res

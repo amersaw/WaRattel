@@ -33,6 +33,7 @@ jobs:
           command: sam build
       - run: 
           name: "Sam deploy"
-          command: sam deploy
+          command: sam deploy --parameter-overrides ParameterKey=TelegramBotToken,ParameterValue=${TELEGRAM_BOT_TOKEN} ParameterKey=TelegramWebhookUrl,ParameterValue=${TELEGRAM_WEBHOOK_URL}
+
 
 

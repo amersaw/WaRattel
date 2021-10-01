@@ -1,13 +1,13 @@
 from model import MsgType
 from model import Response, Update
-from quran import QuranPageProvider
+from warattel_bot_brain.quran import QuranPageProvider
 
 
 # from model import User
 # from data import users
 
 
-class BotBrain:
+class WarattelBotBrain:
     def __init__(self):
         self.quranPages = QuranPageProvider()
 

@@ -1,7 +1,7 @@
 from os import getenv
 from dotenv import load_dotenv
 
-load_dotenv("secrets.txt")
+load_dotenv(".env")
 
 config = {
     "connection_string": getenv("DB_CONNECTION_STRING"),
@@ -9,4 +9,3 @@ config = {
     "bot_token": getenv("TELEGRAM_BOT_TOKEN"),
     "bot_webhook_url": getenv("TELEGRAM_WEBHOOK_URL"),
 }
-

@@ -21,13 +21,6 @@ jobs:
       - sam/install
       - python/install-packages:
           pkg-manager: pip
-      - run:
-          name: Setup Environment Variables
-          command: |
-            echo "export DB_CONNECTION_STRING=$DB_CONNECTION_STRING" >> secrets.txt
-            echo "export DB_NAME=$DB_NAME" >> secrets.txt
-            echo "export TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN" >> secrets.txt
-            echo "export TELEGRAM_WEBHOOK_URL=$TELEGRAM_WEBHOOK_URL" >> secrets.txt
       - run: 
           name: "Sam Build"
           command: sam build

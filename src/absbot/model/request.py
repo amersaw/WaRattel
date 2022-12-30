@@ -1,12 +1,12 @@
+from model.user import User
 from .Enums.channel import Channel
 from .Enums.msg_type import MsgType
 
 
-class Update:
+class Request:
     def __init__(self):
         self.msg_id: int
-        self.sender_id: int
+        self.user: User
         self.channel: Channel
         self.text: str
         self.type: MsgType
-

@@ -1,1 +1,1 @@
-from .brain import WarattelBotBrain
+from .warattel_bot_brain import WarattelBotBrain

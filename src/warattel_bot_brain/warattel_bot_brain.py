@@ -1,5 +1,5 @@
-from model import MsgType
-from model import Response, Update
+from absbot.model import MsgType, Request, Response
+from absbot.interfaces import BotBrain
 from warattel_bot_brain.quran import QuranPageProvider
 
 
@@ -7,9 +7,10 @@ from warattel_bot_brain.quran import QuranPageProvider
 # from data import users
 
 
-class WarattelBotBrain:
+class WarattelBotBrain(BotBrain):
     def __init__(self):
         self.quranPages = QuranPageProvider()
+        self.id = "warattel"
 
     def isInt(self, x):
         return all([xi in "1234567890" for xi in x])
@@ -34,4 +35,3 @@ class WarattelBotBrain:
                 return Response(update, "❤️وعليكم السلام")
         except Exception as ex:
             return Response(update, str(ex))
-

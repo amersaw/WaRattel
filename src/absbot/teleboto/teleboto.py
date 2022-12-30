@@ -1,12 +1,22 @@
 import telegram
-from model import Update, Channel, MsgType, Response
+from telegram.user import User as TGUser
+from model import Update, Channel, MsgType, Response, User
+from absbot.interfaces import Store
+from absbot.interfaces import BotBrain
 
 
 class Teleboto(telegram.Bot):
-    def __init__(self, config, bot_brain):
-        self.TOKEN = config["bot_token"]
-        self.webhook_url = config["bot_webhook_url"]
+    def __init__(
+        self,
+        bot_token: str,
+        public_webhook_url: str,
+        bot_brain: BotBrain,
+        store: Store,
+    ):
+        self.TOKEN = bot_token
+        self.public_webhook_url = public_webhook_url
         self.bot_brain = bot_brain
+        self.store = store
 
         super().__init__(token=self.TOKEN)
         # self.bot = telegram.Bot(token=self.TOKEN)
@@ -35,7 +45,9 @@ class Teleboto(telegram.Bot):
         )
 
     def set_webhook(self):
-        return self.setWebhook(f"{self.webhook_url}?action=telegram_update&token={self.TOKEN}")
+        return self.setWebhook(
+            f"{self.public_webhook_url}?action=telegram_update&token={self.TOKEN}"
+        )
 
     def get_webhook(self):
         wh = self.getWebhookInfo()
@@ -46,25 +58,37 @@ class Teleboto(telegram.Bot):
             "last_error_date": wh.last_error_date,
         }
 
-    def to_update(self, json) -> Update:
-        u = telegram.Update.de_json(json, self)
+    @staticmethod
+    def to_user(tg_user: TGUser) -> User:
+        return User(
+            tg_user.id,
+            tg_user.username,
+            firstname=tg_user.first_name,
+            lastname=tg_user.last_name,
+        )
+
+    def to_update(self, update) -> Update:
         res = Update()
+        res.user = self.to_user(update)
+
         res.channel = Channel.TELEGRAM
-        res.sender_id = u.message.chat.id
-        res.msg_id = u.message.message_id
+        res.msg_id = update.message.message_id
         res.text = (
-            u.message.text.encode("utf-8").decode()
-            if u.message and u.message.text
+            update.message.text.encode("utf-8").decode()
+            if update.message and update.message.text
             else None
         )
-        res.type = MsgType.TEXT if u.message and u.message.text else MsgType.OTHER
+        res.type = (
+            MsgType.TEXT if update.message and update.message.text else MsgType.OTHER
+        )
         # u.message.chat.type
         return res
 
-    def update(self, update_request):
+    def process_update(self, update_request):
         update = None
         try:
-            update = self.to_update(update_request)
+            update = telegram.Update.de_json(update_request, self)
+            update = self.to_update(update)
             if update.type != MsgType.TEXT:
                 self.send_response(
                     Response(
@@ -80,7 +104,5 @@ class Teleboto(telegram.Bot):
 
         except Exception as ex:
             if update and update.sender_id:
-                self.send_message(
-                    chat_id=update.sender_id, text=str(ex)
-                )
+                self.send_message(chat_id=update.sender_id, text=str(ex))
         return 1
